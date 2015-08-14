@@ -1,10 +1,13 @@
-import json
+﻿import json
 from pprint import pprint
 import sys
 
 def jsonReader():
     with open(r"F:\PY\data\pokemon.json") as f:
-        data = json.loads(f.read())
+        str=f.read()
+        for i in range(0,32):
+            str = str.replace(chr(i),'')
+        data = json.loads(str)
     pprint(data)
 
 
