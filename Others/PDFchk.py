@@ -30,12 +30,17 @@ def main():
                 if Identified == True:
                     break
 
-                r=page['/Resources']['/ProcSet']
+                r=str(page['/Resources'])
+                if r.find("/Text")>=0:
+                    Identified = True
+                    break
 
-                for i in range(len(r)):
-                    if r[i]=="/Text":
-                        Identified = True
-                        break
+                #r=page['/Resources']['/ProcSet']
+                
+                #for i in range(len(r)):
+                #    if r[i]=="/Text":
+                #    break
+                        
         
             if Identified == True:
                 lstPdfText.append(fileNameStr)
