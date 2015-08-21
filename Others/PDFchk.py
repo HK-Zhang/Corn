@@ -1,7 +1,9 @@
 from PyPDF2 import PdfFileReader
 from nt import listdir
+import os
 import time
 import sys
+import shutil
 
 toolbar_width = 50
 
@@ -19,7 +21,8 @@ def main():
 
     for i in range(m):
         fileNameStr = fileList[i]
-        inputPdf = PdfFileReader(open(fileNameStr, "rb"))
+        f=open(fileNameStr, "rb")
+        inputPdf = PdfFileReader(f)
 
         Identified = False
         try:
@@ -27,9 +30,7 @@ def main():
                 if Identified == True:
                     break
 
-                #re=page.get('/Resources')
                 r=page['/Resources']['/ProcSet']
-               # r=re.get('/ProcSet')
 
                 for i in range(len(r)):
                     if r[i]=="/Text":
@@ -42,24 +43,9 @@ def main():
                 lstPdfImg.append(fileNameStr)
         except:
             lsfPdfErr.append(fileNameStr)
-            
-            #txt = page.extractText()
-            #if txt != "":
-            #    break
 
-        #if txt =="":
-        #    countImg+=1
-        #else:
-        #    countNimg+=1
-
-        #docInfo = inputPdf.getDocumentInfo()
-        #if docInfo.producer != None:
-        #    countNimg+=1
-        #elif docInfo.creator==None:
-        #    countImg+=1
-        #else: 
-        #    countNimg+=1
-
+        f.close()
+           
         #control progress bar
         if barWidth>0 and (i+1.0)/float(m*1.0/toolbar_width) - barIndex>=1:
             for j in range(0,int((i+1.0)/float(m*1.0/toolbar_width) - barIndex)):
@@ -70,16 +56,26 @@ def main():
                 sys.stdout.write("-")
         sys.stdout.flush()
 
+    #output result
     file_object = open('Text_List.txt', 'w')
-    [file_object.writelines(x+'\n') for x in lstPdfText]
+    for x in lstPdfText:
+        file_object.writelines(x+'\n')
+        if not os.path.exists(r'./TxtBasedPDF/'+x):
+            os.rename('./'+x, './TxtBasedPDF/'+x) 
     file_object.close( )
 
     file_object = open('Img_List.txt', 'w')
-    [file_object.writelines(x+'\n') for x in lstPdfImg]
+    for x in lstPdfImg:
+        file_object.writelines(x+'\n')
+        if not os.path.exists(r'./ImgBasedPDF/'+x):
+            os.rename('./'+x, './ImgBasedPDF/'+x) 
     file_object.close( )
 
     file_object = open('Err_List.txt', 'w')
-    [file_object.writelines(x+'\n') for x in lsfPdfErr]
+    for x in lsfPdfErr:
+        file_object.writelines(x+'\n')
+        if not os.path.exists(r'./ErrorPDF/'+x):
+            os.rename('./'+x, './ErrorPDF/'+x) 
     file_object.close( )
 
     sys.stdout.write("Done]\n")
@@ -93,16 +89,35 @@ def main():
     file_object.writelines('Image pdf files:%d \n' % len(lstPdfImg))
     file_object.writelines('Not only image pdf files:%d \n' % len(lstPdfText))
     file_object.writelines('Fail to read pdf files:%d \n' % len(lsfPdfErr))
-    file_object.close( )
+    file_object.close()
 
-    sys.stdout.write('Type q to exit program:')
+#steup folders
+isExists=os.path.exists(r'.\ImgBasedPDF')
+if not isExists:
+    os.makedirs(r'.\ImgBasedPDF')
+
+isExists=os.path.exists(r'.\TxtBasedPDF')
+if not isExists:
+    os.makedirs(r'.\TxtBasedPDF')
+
+isExists=os.path.exists(r'.\ErrorPDF')
+if not isExists:
+    os.makedirs(r'.\ErrorPDF')
+
+if __name__ == '__main__':
+    main()
+
+    #Exit program
+    time1= time.time()
+    #sys.stdout.write('Type q to exit program:')
+    sys.stdout.write('Task is completed and will exit after 5 sec:')
     while(True):
-        exit = sys.stdin.readline(1)
-        print exit
-        if exit=="q":
+        time2= time.time()
+        if (time2-time1)>5:
             break
-        else:
-            sys.stdout.write('Type q to exit program:')
-
-
-main()
+        #exit = sys.stdin.readline(1)
+        #print exit
+        #if exit=="q":
+        #    break
+        #else:
+        #    sys.stdout.write('Type q to exit program:')
