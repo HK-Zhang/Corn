@@ -25,15 +25,31 @@ def main():
         inputPdf = PdfFileReader(f)
 
         Identified = False
-        try:
+
+        try:       
+            for page in inputPdf.pages:
+                if Identified == True:
+                    break
+
+                extractedText = page.extractText()
+                if len(extractedText)>0:
+                    Identified = True
+                    break
+
             for page in inputPdf.pages:
                 if Identified == True:
                     break
 
                 r=str(page['/Resources'])
-                if r.find("/Text")>=0:
+                if r.find("/Text")>=0 and r.find("/Font")>=0:
                     Identified = True
                     break
+                elif r.find('/ProcSet')>=0:
+                    fr=str(page['/Resources']['/ProcSet'])
+                    if fr.find("/Text")>=0 and r.find("/Font")>=0:
+                        Identified = True
+                        break
+
 
                 #r=page['/Resources']['/ProcSet']
                 
@@ -41,7 +57,13 @@ def main():
                 #    if r[i]=="/Text":
                 #    break
                         
-        
+            #docInfo = inputPdf.getDocumentInfo() 
+            #if str(docInfo.producer).upper().find('KONICA')>=0:
+            #    Identified = False
+
+            
+
+
             if Identified == True:
                 lstPdfText.append(fileNameStr)
             else:
