@@ -1,4 +1,5 @@
-import scipy as sp
+﻿import scipy as sp
+import numpy as np
 import sys
 
 def Example1():
@@ -74,27 +75,44 @@ def Example1():
     print s0,s1
 
 def Example2():
-    pass
+    a = sp.array([[-1,2,3],[4,-5,0]])
+    print a
     #scipy.any(a): return True if any element of a is True 
     #scipy.all(a): return True if all elements of a are True 
     #scipy.alltrue(a, axis): perform logical_and along given axis of a 
+    print sp.any(a),sp.all(a),sp.alltrue(a,axis=0),sp.alltrue(a,axis=1)
     #scipy.append(a, values, axis): append values to a along specified axis 
+    print sp.append(a,[[7,8,9],[10,11,12]]),sp.append(a,[[7,8,9],[10,11,12]],axis=0),sp.append(a,[[7,8,9],[10,11,12]],axis=1)
     #scipy.concatenate((a1, a2, ...), axis): concatenate tuple of arrays along specified axis 
-    #min and max is not available in scipy
+    print sp.concatenate((a,[[7,8,9],[10,11,12]])),sp.concatenate((a,[[7,8,9],[10,11,12]]),axis=0),sp.concatenate((a,[[7,8,9],[10,11,12]]),axis=1)
     #scipy.min(a, axis=None), scipy.max(a, axis=None): get min/max values of a along specified axis (global min/max if axis=None) 
+    print np.min(a),np.max(a)
     #scipy.argmin(a, axis=None), scipy.argmax(a, axis=None): get indices of min/max of a along specified axis (global min/max if axis=None) 
-    #scipy.reshape(a, newshape): reshape a to newshape (must conserve total number of elements) 
+    print sp.argmin(a),sp.argmin(a,axis=0),sp.argmin(a,axis=1)
+    print sp.argmax(a),sp.argmax(a,axis=0),sp.argmax(a,axis=1)
+    #scipy.reshape(a, newshape): reshape a to newshape (must conserve total number of elements)
+    b=sp.reshape(a,(3,2)) 
+    print b
     #scipy.matrix(a): create matrix from 2D array a (matrices implement matrix multiplication rather than element-wise multiplication) 
+    m=sp.matrix(a)
+    print m
     #scipy.histogram, scipy.histogram2d, scipy.histogramdd: 1-dimensional, 2-dimensional, and d-dimensional histograms, respectively 
+    print sp.histogram([1, 2, 1], bins=[0, 1, 2, 3])
+    print sp.histogram([[1, 2, 1], [1, 0, 1]], bins=[0,1,2,3])
     #scipy.round(a, decimals=0): round elements of matrix a to specified number of decimals 
+    c=sp.array([[1.1,2.2,3.3],[4.5,6.6,6.7]])
+    print np.round(c,decimals=0)
     #scipy.sign(a): return array of same shape as a, with -1 where a < 0, 0 where a = 0, and +1 where a > 0 
+    print sp.sign(a)
     #a.tofile(fid, sep="", format="%s"): write a to specified file (fid), in either binary or ascii format depending on options 
     #scipy.fromfile(file=, dtype=float, count=-1, sep=''): read array from specified file (binary or ascii) 
     #scipy.unique(a): return sorted unique elements of array a 
+    print sp.unique(a)
     #scipy.where(condition, x, y): return array with same shape as condition, where values from x are inserted in positions where condition is True, and values from y where condition is False 
+    print sp.where([[2,3,4],[0,0,0]],1,-1)
 
 def main():
-    Example1()
+    Example2()
 
 if __name__ == "__main__":
     main()
