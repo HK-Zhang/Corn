@@ -80,6 +80,7 @@ def Example2():
     #scipy.alltrue(a, axis): perform logical_and along given axis of a 
     #scipy.append(a, values, axis): append values to a along specified axis 
     #scipy.concatenate((a1, a2, ...), axis): concatenate tuple of arrays along specified axis 
+    #min and max is not available in scipy
     #scipy.min(a, axis=None), scipy.max(a, axis=None): get min/max values of a along specified axis (global min/max if axis=None) 
     #scipy.argmin(a, axis=None), scipy.argmax(a, axis=None): get indices of min/max of a along specified axis (global min/max if axis=None) 
     #scipy.reshape(a, newshape): reshape a to newshape (must conserve total number of elements) 
