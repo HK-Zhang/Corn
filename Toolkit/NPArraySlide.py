@@ -1,4 +1,4 @@
-import numpy as np
+﻿import numpy as np
 import sys
 
 def main():
@@ -15,6 +15,10 @@ def main():
     print 'reverse print all elements with 2 interval,',A[::-2]
     print 'reverse print elements from the 4th element with 2 interval,',A[3::-2]
     print 'reverse print elements from the last 4th element with 2 interval,',A[-3::-2]
+    #print A[a:b:c]: a and b determine range of slide. c determine the interval and direction (forth or reverse)
+    print A[:-3:-1]
+    print A[:3:1]
+    print A[:3:-1]
     C=A[::-1]
     C[0]=10
     print 'A is also changed as how does c change,',A
