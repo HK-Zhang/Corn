@@ -1,4 +1,5 @@
 ﻿import numpy as np
+from numpy import linalg as LA
 import sys
 
 def dTypeTest():
@@ -53,8 +54,13 @@ def dTypeTest():
     a=np.array([([1,2,3],'this is a')],dtype=dt)
     print a
 
+def conditionNumberTest():
+    a = np.array([[1, 0, -1], [0, 1, 0], [1, 0, 1]])
+    #p : {None, 1, -1, 2, -2, inf, -inf, ‘fro’}, optional
+    print LA.cond(a),LA.cond(a,1)
+
 def main():
-    dTypeTest()
+    conditionNumberTest()
 
 if __name__ == "__main__":
     main()
