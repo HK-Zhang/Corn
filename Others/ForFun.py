@@ -30,7 +30,7 @@ def num_of_one(num):
     return cnt
 
 def num_of_one2(num):
-    cnt = 0;
+    cnt = 0
     while c_int(num).value:
         cnt+=1
         num = (num -1) & num
