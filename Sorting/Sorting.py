@@ -273,3 +273,4 @@ def sortTest():
 
 if __name__=='Sorting':
     print('Sorting is running')
+    sortTest()
