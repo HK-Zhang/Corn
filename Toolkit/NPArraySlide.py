@@ -19,6 +19,8 @@ def main():
     print A[:-3:-1]
     print A[:3:1]
     print A[:3:-1]
+    print A[:-3:1]
+    print A[-3::-1]
     C=A[::-1]
     C[0]=10
     print 'A is also changed as how does c change,',A
