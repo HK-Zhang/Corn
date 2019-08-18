@@ -10,10 +10,10 @@
             "request": "launch",
             "stopOnEntry": false,
             "pythonPath": "${workspaceRoot}/venv/Scripts/python.exe",
-            "program": "${workspaceRoot}/manage.py",
+            "program": "${workspaceRoot}/main.py",
             "cwd": "${workspaceRoot}",
             "env": {
-                "FLASK_APP": "${workspaceRoot}/manage.py",
+                "FLASK_APP": "${workspaceRoot}/main.py",
                 "FLASK_ENV": "development",
                 "FLASK_DEBUG": "0"
             },
