@@ -1,6 +1,7 @@
 from flask import Flask, url_for, jsonify, abort, request
 from app.models import Todo, db
 from . import api
+from ai import *
 
 def replace_id_to_uri(task):
     return dict(uri=url_for('api.get_task', task_id=task.id, _external=True),
@@ -8,6 +9,11 @@ def replace_id_to_uri(task):
                 description=task.description,
                 done=task.done)
 
+
+@api.route('/todo/api/todo/', methods=['GET'])
+def get_todos():
+    t = hel("Henry")
+    return jsonify({'todo': t})
 
 @api.route('/todo/api/tasks/', methods=['GET'])
 def get_tasks():
