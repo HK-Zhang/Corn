@@ -38,3 +38,6 @@ config = {
     'production': ProductionConfig,    
     'default': DevelopmentConfig
 }
+
+# to be replaced with real app insight key
+appinsightKey='000000-00000-000000-0000000'
