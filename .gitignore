@@ -3,3 +3,4 @@ FlaskDemo/dev/**
 
 **/__pycache__/**
 BatchUpdate/env/Lib/site-packages/azure/cosmos/cosmos_client.py
+FlaskWeb/__pycache__/**
