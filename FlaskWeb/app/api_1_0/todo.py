@@ -1,5 +1,6 @@
 from flask import Flask, url_for, jsonify, abort, request
 from app.models import Todo, db
+from app.common import InvalidUsage
 from . import api
 from ai import *
 import logging
@@ -40,7 +41,7 @@ def get_todos():
       a = 1/0
       return jsonify({'todo': t})
     except Exception:
-      error_code = uuid.uuid1()
+      error_code = str(uuid.uuid1())
       properties = {'custom_dimensions': {'error_code': error_code}}
       logger.exception('Captured an exception.', extra=properties)
       return f'error_code:{error_code}',500,{"error_code": "abcs"}
@@ -67,6 +68,7 @@ def get_tasks():
               default: null
     """
     tasks = Todo.query.all()
+    raise InvalidUsage('This view is gone', status_code=500)
     return jsonify({'tasks': list(map(replace_id_to_uri, tasks))})
 
 
