@@ -7,11 +7,13 @@ from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 from opencensus.trace.samplers import ProbabilitySampler
 import logging
 from config import config,appinsightKey
+import uuid
 
 
 db = SQLAlchemy()
 format_str = '%(asctime)s - %(levelname)-8s - %(message)s'
 date_format = '%Y-%m-%d %H:%M:%S'
+logging.basicConfig(level=logging.INFO)
 formatter = logging.Formatter(format_str, date_format)
 logger = logging.getLogger("globallogger")
 
@@ -20,15 +22,22 @@ def create_app(config_name):
     handler = AzureLogHandler(connection_string=f'InstrumentationKey={appinsightKey}')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    middleware = FlaskMiddleware(app,exporter=AzureExporter(connection_string=f'InstrumentationKey={appinsightKey}'),sampler=ProbabilitySampler(rate=1.0))    
-    Swagger(app)
-    app.config.from_object(config[config_name])    
-    config[config_name].init_app(app)
-    db.init_app(app)
-    from app.common import cbp as common_blueprint
-    app.register_blueprint(common_blueprint)
-    from app.main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
-    from app.api_1_0 import api as api_1_0_blueprint
-    app.register_blueprint(api_1_0_blueprint, url_prefix='/v1')
-    return app
+    try:
+        middleware = FlaskMiddleware(app,exporter=AzureExporter(connection_string=f'InstrumentationKey={appinsightKey}'),sampler=ProbabilitySampler(rate=1.0))    
+        Swagger(app)
+        app.config.from_object(config[config_name])    
+        config[config_name].init_app(app)
+        db.init_app(app)
+        from app.common import cbp as common_blueprint
+        app.register_blueprint(common_blueprint)
+        from app.main import main as main_blueprint
+        app.register_blueprint(main_blueprint)
+        from app.api_1_0 import api as api_1_0_blueprint
+        app.register_blueprint(api_1_0_blueprint, url_prefix='/v1')
+        logger.info('App Started.')
+        return app
+    except Exception:
+        error_code = str(uuid.uuid1())
+        properties = {'custom_dimensions': {'error_code': error_code}}
+        logger.exception('Captured an exception.', extra=properties)
+        return f'error_code:{error_code}',500,{"error_code": "abcs"}
