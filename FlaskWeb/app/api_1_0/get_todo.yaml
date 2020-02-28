@@ -1,0 +1,17 @@
+This is the todo API
+Call this api passing nothing and get back its result
+---
+tags:
+  - get todos
+responses:
+  500:
+    description: Error!
+  200:
+    description: todo Result
+    schema:
+      id: todo result
+      properties:
+        todo:
+          type: string
+          description: task name
+          default: null

@@ -1,4 +1,5 @@
 from flask import Flask, url_for, jsonify, abort, request
+from flasgger import swag_from
 from app.models import Todo, db
 from app.common import InvalidUsage
 from . import api
@@ -16,26 +17,8 @@ def replace_id_to_uri(task):
 
 
 @api.route('/todo/api/todo/', methods=['GET'])
+@swag_from('get_todo.yaml')
 def get_todos():
-    """
-    This is the todo API
-    Call this api passing nothing and get back its result
-    ---
-    tags:
-      - get todos
-    responses:
-      500:
-        description: Error!
-      200:
-        description: todo Result
-        schema:
-          id: todo result
-          properties:
-            todo:
-              type: string
-              description: task name
-              default: null
-    """
     try:
       t = hel("Henry")
       a = 1/0
@@ -141,6 +124,7 @@ def create_task():
               description: task object
               default: null
     """
+    return '';
     if not request.json or not 'title' in request.json:
         abort(400)
 
