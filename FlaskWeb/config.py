@@ -40,4 +40,4 @@ config = {
 }
 
 # to be replaced with real app insight key
-appinsightKey='000000-00000-000000-0000000'
+appinsightKey='a21ddd3c-22e4-4b73-a3e9-1cc93adde3fb'

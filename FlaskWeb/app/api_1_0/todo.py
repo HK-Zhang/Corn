@@ -7,7 +7,7 @@ from ai import *
 import logging
 import uuid
 
-logger = logging.getLogger("globallogger")
+# logger = logging.getLogger("globallogger")
 
 def replace_id_to_uri(task):
     return dict(uri=url_for('api.get_task', task_id=task.id, _external=True),
@@ -26,7 +26,7 @@ def get_todos():
     except Exception:
       error_code = str(uuid.uuid1())
       properties = {'custom_dimensions': {'error_code': error_code}}
-      logger.exception('Captured an exception.', extra=properties)
+      logging.exception('Captured an exception.', extra=properties)
       return f'error_code:{error_code}',500,{"error_code": "abcs"}
 
 @api.route('/todo/api/tasks/', methods=['GET'])
