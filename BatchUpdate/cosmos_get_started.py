@@ -1,19 +1,19 @@
-import azure.cosmos.cosmos_client as cosmos_client
-import azure.cosmos.partition_key as PartitionKey
+from azure.cosmos import CosmosClient, PartitionKey
 
 import json
 
 # Initialize the Cosmos client
-endpoint = "https://localhost:8081/"
+endpoint = "https://localhost:8081"
 key = 'C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=='
 
 # <create_cosmos_client>
-client = cosmos_client.CosmosClient(endpoint, {'masterKey': key})
+# client = cosmos_client.CosmosClient(endpoint, {'masterKey': key})
+client = CosmosClient(endpoint, credential=key)
 # </create_cosmos_client>
 
 # Create a database
 # <create_database_if_not_exists>
-database_name = 'YEYE'
+database_name = 'NDT'
 # database = client.create_database_if_not_exists(id=database_name)
 # </create_database_if_not_exists>
 
@@ -28,8 +28,11 @@ container_name = 'Main'
 # )
 # </create_container_if_not_exists>
 
-container = client.ReadContainer(
-    "dbs/" + database_name + "/colls/" + container_name)
+# container = client.ReadContainer(
+#     "dbs/" + database_name + "/colls/" + container_name)
+
+database = client.get_database_client(database_name)
+container = database.get_container_client(container_name)
 
 # Add items to the container
 # family_items_to_create = [family.get_andersen_family_item(), family.get_johnson_family_item(), family.get_smith_family_item(), family.get_wakefield_family_item()]
@@ -71,13 +74,12 @@ query = "SELECT distinct c.partitionKey FROM c"
 #     len(items), request_charge))
 # </query_items>
 
-sproc_link = "dbs/" + database_name + "/colls/" + container_name+'/sprocs/demo'
+# sproc_link = "dbs/" + database_name + "/colls/" + container_name+'/sprocs/updateEnv'
 # client.ExecuteStoredProcedure(sproc_link, [{'Env':'SHAL600086'}], {'partitionKey': 'V_6HWRuVSi4Eq7f4loKhWD5A'})
 
-for item in client.QueryItems("dbs/" + database_name + "/colls/" + container_name,
-                              query,
-                              {'enableCrossPartitionQuery': True}):
-                              client.ExecuteStoredProcedure(sproc_link, [{'Env':'Production'}], {'partitionKey': item['partitionKey']})
+for item in container.query_items(query,enable_cross_partition_query=True):
+                              print(item['partitionKey']+' start to updated')
+                              container.scripts.execute_stored_procedure(sproc="updateEnv", params=['SHAL000089'], partition_key = item['partitionKey'])
                               print(item['partitionKey']+' get updated')
 
 
