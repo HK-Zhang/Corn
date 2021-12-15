@@ -6,11 +6,12 @@ from opencensus.ext.azure.log_exporter import AzureLogHandler
 from opencensus.ext.flask.flask_middleware import FlaskMiddleware
 from opencensus.trace.samplers import ProbabilitySampler
 import logging
-from config import config,appinsightKey
+from config import config,appinsightKey,apiversion,AZURE_CLIENT_ID,AZURE_CLIENT_SECRET,AZURE_TENANT_ID,KEY_VAULT_NAME,load_config
 import uuid
 import zipfile
 import os
 import sys
+import socket
 
 # zip = zipfile.ZipFile("C:\\Users\\yxzhk\\Workspace\\x.zip", 'w', zipfile.ZIP_DEFLATED )
 # for filename in os.listdir("C:\\Users\\yxzhk\\Workspace\\result"):
@@ -18,11 +19,13 @@ import sys
 # zip.close()
 
 db = SQLAlchemy()
-format_str = '%(asctime)s - %(levelname)-8s - %(message)s'
+hostname=socket.gethostname()
+format_str = f'{apiversion}@{hostname} says:'+'%(asctime)s - %(levelname)-8s - %(message)s'
 date_format = '%Y-%m-%d %H:%M:%S'
 logging.basicConfig(level=logging.INFO)
 formatter = logging.Formatter(format_str, date_format)
 logger = logging.getLogger()
+
 
 
 def create_app(config_name):    
@@ -31,6 +34,7 @@ def create_app(config_name):
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     try:
+        # load_config()
         middleware = FlaskMiddleware(app,exporter=AzureExporter(connection_string=f'InstrumentationKey={appinsightKey}'),sampler=ProbabilitySampler(rate=1.0))    
         Swagger(app)
         app.config.from_object(config[config_name])    

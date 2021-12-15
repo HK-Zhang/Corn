@@ -15,7 +15,8 @@
             "env": {
                 "FLASK_APP": "${workspaceRoot}/main.py",
                 "FLASK_ENV": "development",
-                "FLASK_DEBUG": "0"
+                "FLASK_DEBUG": "0",
+                "AZURE_CLIENT_SECRET":"aaa"
             },
             "args": [
                 "runserver"

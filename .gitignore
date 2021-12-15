@@ -6,3 +6,4 @@ BatchUpdate/env/Lib/site-packages/azure/cosmos/cosmos_client.py
 FlaskWeb/__pycache__/**
 FlaskWeb/app/main/__pycache__/**
 **.pyc
+FlaskWeb/__pycache__/**

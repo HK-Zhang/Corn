@@ -1,0 +1,2 @@
+import collide
+collide.collide()

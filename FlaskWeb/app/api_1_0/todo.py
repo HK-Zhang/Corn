@@ -1,12 +1,15 @@
-from flask import Flask, url_for, jsonify, abort, request
+from flask import Flask, url_for, jsonify, abort, request,send_from_directory,send_file
 from flasgger import swag_from
 from app.models import Todo, db
 from app.common import InvalidUsage
+from config import get_sas
 from . import api
 from ai import *
 import logging
 import uuid
-
+import io
+import os
+import json
 # logger = logging.getLogger("globallogger")
 
 def replace_id_to_uri(task):
@@ -21,6 +24,7 @@ def replace_id_to_uri(task):
 def get_todos():
     try:
       t = hel("Henry")
+      b = get_sas()
       a = 1/0
       return jsonify({'todo': t})
     except Exception:
@@ -54,6 +58,47 @@ def get_tasks():
     raise InvalidUsage('This view is gone', status_code=500)
     return jsonify({'tasks': list(map(replace_id_to_uri, tasks))})
 
+@api.route('/todo/api/upload/', methods=['POST'])
+@swag_from('upload.yaml')
+def upload_files():
+  imageInCloud = False
+  if not request.json:
+      requestjson = json.loads(request.form["body"])
+  else:
+    requestjson=request.json
+    imageInCloud = True
+
+  dirPath = requestjson['path']
+  filename = requestjson['fileName']
+  # thickness = requestjson['thickness']
+  # rule = requestjson['rule']
+  # accLevel = requestjson['accLevel']
+
+
+  # thickness = json.loads(request.form["body"])
+  # t =  thickness["t"] if 't' in thickness else None
+  films = requestjson['films']
+
+  for filmName in films:
+    f = request.files[filmName]
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    f.save(os.path.join(current_dir, filmName))
+
+
+  # f = request.files['image']
+  # current_dir = os.path.dirname(os.path.realpath(__file__))
+  # f.save(os.path.join(current_dir, "demo.jpg"))
+
+  with open(os.path.join(current_dir, "result.zip"),'rb') as f:
+    g=io.BytesIO(f.read())
+
+  os.remove(os.path.join(current_dir, "result.zip"))
+  return send_file(g, as_attachment=True,
+                     attachment_filename="result.zip",
+                     mimetype="application/zip")
+
+  # return send_from_directory(current_dir, "result.zip", as_attachment=True)
+  # return jsonify({'fileName': f.filename})
 
 @api.route('/todo/api/tasks/<int:task_id>', methods=['GET'])
 def get_task(task_id):
