@@ -51,7 +51,11 @@ class GreeterAsync(hello_pb2_grpc.GreeterServicer):
       return hello_pb2.HelloReply(message='hello {msg}'.format(msg=request.name))
 
 def serve():
+    service_names = (
+      hello_pb2.DESCRIPTOR.services_by_name["Greeter"].full_name,
+      reflection.SERVICE_NAME)
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    reflection.enable_server_reflection(service_names, server)
     hello_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
     server.add_insecure_port("[::]:50051")
     server.start()
@@ -123,9 +127,9 @@ async def serve_async():
 
 
 if __name__ == "__main__":
-    # serve()
+    serve()
     # serve_ex()
     # serve_meta()
     # serve_compress()
     # serve_signal()
-    asyncio.run(serve_async())
+    # asyncio.run(serve_async())
