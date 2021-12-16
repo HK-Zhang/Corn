@@ -27,6 +27,8 @@ def serve():
     server.start()
     try:
         server.wait_for_termination()
+        # while True:
+        #     time.sleep(60*60*24) # one day in seconds
     except KeyboardInterrupt:
         server.stop(0)
 

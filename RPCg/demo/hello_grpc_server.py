@@ -26,6 +26,9 @@ class GreeterException(hello_pb2_grpc.GreeterServicer):
 
 class GreeterMeta(hello_pb2_grpc.GreeterServicer):
     def SayHello(self, request, context):
+        print("接收到的请求头元数据信息",context.invocation_metadata())
+        context.send_initial_metadata((('name','223232'),('sex','23232')))
+        context.set_trailing_metadata((('name','223232'),('sex','23232')))
         return hello_pb2.HelloReply(message='hello {msg}'.format(msg=request.name))
 
     def SayHelloAgain(self, request, context):

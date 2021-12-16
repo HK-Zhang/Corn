@@ -22,7 +22,7 @@ class Greeter(serverstrem_pb2_grpc.GreeterServicer):
         pass
         for curr_request in request_iterator:
             print(curr_request.name)
-            if curr_request.name=="后会有期":
+            if curr_request.name=="后会有期" or curr_request.name=="end":
                 return serverstrem_pb2.HelloReply(message=f"{curr_request.name=} 啊！我们后会有期！")
 
 
