@@ -23,7 +23,7 @@ lazy-object-proxy==1.4.1
 Mako==1.1.0
 MarkupSafe==1.1.1
 mccabe==0.6.1
-mistune==0.8.4
+mistune==2.0.3
 opencensus==0.7.7
 opencensus-context==0.1.1
 opencensus-ext-azure==1.0.2
